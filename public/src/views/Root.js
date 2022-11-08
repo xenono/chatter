@@ -6,6 +6,7 @@ import Login from "./Login";
 import Signup from "./Signup";
 
 import 'bootstrap/dist/css/bootstrap.css';
+import PageNotFound from "./PageNotFound";
 
 
 const Root = props => {
@@ -15,6 +16,7 @@ const Root = props => {
                 <Route path="/chat" element={<Chat {...props}/>}/>
                 <Route path="/" element={<Login {...props}/>}/>
                 <Route path="/signup" element={<Signup {...props}/>}/>
+                <Route path="*" element={<PageNotFound {...props}/>}/>
             </Routes>
         </BrowserRouter>
 
