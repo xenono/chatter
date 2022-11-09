@@ -15,7 +15,7 @@ const LogoImg = styled.img`
 `
 const Navigation = props => {
     return (
-        <Wrapper className="d-flex flex-column flex-md-row align-items-center justify-content-between p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+        <Wrapper className="d-flex flex-column flex-md-row align-items-center justify-content-between p-3 px-md-4 bg-white border-bottom box-shadow">
             <div className="d-flex align-items-center">
                 <LogoImg src={Logo} alt=""/>
                 <h3 className="my-0 mr-md-auto font-weight-normal">Chatter</h3>

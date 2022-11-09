@@ -13,6 +13,8 @@ const PageNotFound = props => {
             <ErrorImg src={ErrorIcon} alt="" className="mb-3"/>
             <h1 className="text-danger">Error 404</h1>
             <h4>Page Not Found</h4>
+            <a href="/" className="btn btn-lg btn-primary mb-3">Login</a>
+            <a href="/signup" className="btn btn-lg btn-warning">Sign up</a>
         </div>
     );
 };

@@ -3,19 +3,22 @@ import PropTypes from 'prop-types';
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-  height: 3vh;
+  width: 15%;
+  background-color:
+          #58C2F3
+;
 `
 
-const Footer = props => {
+const FriendsList = props => {
     return (
         <Wrapper>
-            <h3 className="text-center h6 text-muted">&copy; Adrian Urbanczyk 2022</h3>
+
         </Wrapper>
     );
 };
 
-Footer.propTypes = {
+FriendsList.propTypes = {
 
 };
 
-export default Footer;
+export default FriendsList;

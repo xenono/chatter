@@ -3,19 +3,20 @@ import PropTypes from 'prop-types';
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-  height: 3vh;
+  width: 55%;
+  background-color:#2c2f33;
 `
 
-const Footer = props => {
+const ChatBox = props => {
     return (
         <Wrapper>
-            <h3 className="text-center h6 text-muted">&copy; Adrian Urbanczyk 2022</h3>
+
         </Wrapper>
     );
 };
 
-Footer.propTypes = {
-
+ChatBox.propTypes = {
+    
 };
 
-export default Footer;
+export default ChatBox;

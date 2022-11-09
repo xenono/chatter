@@ -36,8 +36,9 @@ const Login = props => {
                     <label htmlFor="password" className="sr-only mb-2">Password</label>
                     <input type="password" id="password" name="password" className="form-control mb-3" placeholder="Password"
                            required autoComplete="true"/>
-                        <button className="btn btn-lg btn-primary btn-block mt-2" type="submit">Login</button>
-                        <p className="mt-4 mb-3 text-muted">&copy; Adrian Urbanczyk 2022</p>
+                    <button className="btn btn-lg btn-primary btn-block mt-2" type="submit">Login</button>
+                    <p className="mt-3">Don't have an account? <a href="/signup">Sign up</a></p>
+                    <p className="mt-3 mb-1 text-muted">&copy; Adrian Urbanczyk 2022</p>
             </Form>
         </Wrapper>
     );
