@@ -9,7 +9,8 @@ import FriendsList from "../components/FriendsList";
 const ChatWrapper = styled.div`
     height:90vh;
     display: flex;
-  justify-content: space-between;
+    justify-content: space-between;
+    background-color: ${({theme}) => theme.normal};
 `
 const Chat = props => {
     return (
