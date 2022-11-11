@@ -5,7 +5,7 @@ const RoundImage = styled.img`
   border-radius: 50px;
   box-shadow: 1px 1px 3px black;
   margin-right: 10px;
-
+  object-fit: cover;
 `
 
 
