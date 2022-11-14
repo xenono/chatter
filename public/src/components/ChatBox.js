@@ -98,26 +98,6 @@ const DateText = styled.span`
   color: ${({theme}) => theme.sLight};
 `
 
-// const messages = [
-//     {
-//         author: "Astronaut",
-//         image: Astronaut,
-//         type: "text",
-//         content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a gaContrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Syd\n" +
-//             "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum,",
-//         date: new Date(2022, 11, 10, 22, 1, 0)
-//     },
-//     {
-//         author: "Tiger",
-//         image: Tiger,
-//         type: "text",
-//         content: "Apple Pay Later lets customers split a purchase into four equal payments over six weeks, with no interest or fees to pay. Apple Pay Later is available for purchases in apps and online when customers check out with Apple Pay.\n" +
-//             "And it’s built into Wallet so customers can easily track what they owe and when they owe it.\n" +
-//             "By using the Mastercard network, Apple Pay Later just works with Apple Pay and requires no integration for merchants.",
-//         date: new Date(2022, 11, 11, 22, 1, 0)
-//     },
-// ]
-
 const ChatBox = props => {
 
     const [messages, setMessages] = useState([]);
@@ -165,8 +145,8 @@ const ChatBox = props => {
                     </MessageStream>
                 ))}
             </Chat>
-            <NewMessageForm onSubmit={onSubmit} className="d-flex align-items-center justify-content-around">
-                <Input type="text" name="message" id="message" placeholder="New message"/>
+            <NewMessageForm onSubmit={onSubmit} className="d-flex align-items-center justify-content-around" autocomplete="off">
+                <Input type="text" name="message" id="message" placeholder="New message" />
                 <Button className="btn btn-large" type="submit" onKeyPress={(e) => {
                     if (e.key === "enter") {
                         onSubmit(e)

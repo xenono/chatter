@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components'
-import PropTypes from 'prop-types';
+import { connect } from "react-redux";
 import MainTemplate from "../templates/MainTemplate";
 import ChatNavigation from "../components/ChatNavigation";
 import ChatBox from "../components/ChatBox";
@@ -12,7 +12,8 @@ const ChatWrapper = styled.div`
     justify-content: space-between;
     background-color: ${({theme}) => theme.normal};
 `
-const Chat = props => {
+const Chat = ({state})  => {
+    console.log(state)
     return (
         <MainTemplate>
             <ChatWrapper>
@@ -24,8 +25,12 @@ const Chat = props => {
     );
 };
 
+const mapStateToProps = (state) => {
+    return {state}
+};
+
 Chat.propTypes = {
 
 };
 
-export default Chat;
+export default connect(mapStateToProps)(Chat)
