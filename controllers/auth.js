@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken")
 const dotenv = require("dotenv")
 exports.login = async (req,res,next) => {
-    console.log("xd")
     const {username, password} = req.body;
     const userId = username + password;
     let token;
@@ -10,7 +9,7 @@ exports.login = async (req,res,next) => {
             token = jwt.sign({userId},process.env.SecretJWT,{expiresIn: "1h"})
             res.cookie('token', token, {httpOnly:true})
             res.cookie('isLoggedIn', true)
-            res.status(200).json({status: "success"})
+            res.status(200).json({status: "success",user:{_id:1234,username:"1234"}})
         }catch(err){
             res.send("error " + err.message)
         }

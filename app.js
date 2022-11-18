@@ -10,9 +10,21 @@ const authRoutes = require("./routes/auth")
 const chatRoutes = require("./routes/chat")
 const userRoutes = require("./routes/user")
 
+// CORS Policy
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Methods', '*')
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization,X-CSRF-Token, csrf-token, X-Requested-With, Origin')
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+
+    next()
+})
+
 // Middlewares
 app.use(bodyParser.json())
 app.use(cookieParser())
+
+
 
 app.use('/api', authRoutes);
 app.use('/api', chatRoutes);
