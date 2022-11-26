@@ -9,23 +9,26 @@ import 'bootstrap/dist/css/bootstrap.css';
 import PageNotFound from "./PageNotFound";
 import {Provider} from "react-redux";
 import store from "../store/store";
+import {CookiesProvider, withCookies} from "react-cookie";
 
 
 const Root = props => {
     return (
-        <Provider store={store}>
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/chat" element={<Chat {...props}/>}/>
-                    <Route path="/" element={<Login {...props}/>}/>
-                    <Route path="/signup" element={<Signup {...props}/>}/>
-                    <Route path="*" element={<PageNotFound {...props}/>}/>
-                </Routes>
-            </BrowserRouter>
-        </Provider>
+        <CookiesProvider>
+            <Provider store={store}>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/chat" element={<Chat {...props} cookies={props.cookies}/>} />
+                        <Route path="/" element={<Login {...props}/>}/>
+                        <Route path="/signup" element={<Signup {...props}/>}/>
+                        <Route path="*" element={<PageNotFound {...props}/>}/>
+                    </Routes>
+                </BrowserRouter>
+            </Provider>
+        </CookiesProvider>
     );
 };
 
 Root.propTypes = {};
 
-export default Root;
+export default withCookies(Root);

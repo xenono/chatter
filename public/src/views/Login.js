@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import {connect} from "react-redux";
 import logo from '../assets/chat.png'
 import PropTypes from 'prop-types';
-import {useNavigate} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 import {login as loginAction} from "../actions/actions";
 
 const Wrapper = styled.div`
@@ -16,18 +16,17 @@ const Form = styled.form`
   box-shadow: 4px 4px 6px #c4c4c4;
 `
 const Login = ({login, isLoggedIn}) => {
-    const navigate = useNavigate()
     const onSubmit = (e) => {
         e.preventDefault();
         const username = e.target.username.value;
         const password = e.target.password.value;
         login(username, password)
+
+
     }
-    useEffect(() => {
-        if(isLoggedIn){
-            navigate("/chat")
-        }
-    },[isLoggedIn])
+    if(isLoggedIn === true){
+        return <Navigate to="/chat" />
+    }
     return (
         <Wrapper className="d-flex justify-content-center align-items-center">
             <Form className="form-signin text-center" onSubmit={onSubmit}>

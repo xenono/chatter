@@ -1,24 +1,51 @@
 const jwt = require("jsonwebtoken")
-const dotenv = require("dotenv")
-exports.login = async (req,res,next) => {
+const bcrypt = require("bcrypt")
+const User = require("../models/user")
+
+const HOUR = 60*60*1000
+const MINUTE = 60*1000
+const SECOND = 1000
+exports.login = async (req, res, next) => {
     const {username, password} = req.body;
-    const userId = username + password;
     let token;
-    if(username === "1234" && password === "1234"){
-        try {
-            token = jwt.sign({userId},process.env.SecretJWT,{expiresIn: "1h"})
-            res.cookie('token', token, {httpOnly:true})
-            res.cookie('isLoggedIn', true)
-            res.status(200).json({status: "success",user:{_id:1234,username:"1234"}})
-        }catch(err){
-            res.send("error " + err.message)
+    try {
+        const user = await User.findOne({username})
+        if(!user){
+            const err = new Error("User does not exist!")
+            err.statusCode = 401
+            return next(err)
         }
+        const isPasswordEqual = await bcrypt.compare(password,user.password)
+        if(!isPasswordEqual){
+            const err = new Error("Wrong Credentials!")
+            err.statusCode = 404
+            return next(err)
+        }
+        token = jwt.sign({userId:user._id}, process.env.SecretJWT, {expiresIn: "1h"})
+        res.cookie('token', token, {httpOnly: true, maxAge: HOUR})
+        res.cookie('isLoggedIn', true, {maxAge: HOUR})
+        res.status(200).json({status: 200, user: {_id: user._id, username: user.username}})
+    } catch (err) {
+        res.send("error " + err.message)
     }
+
 }
 
-exports.logout = (req,res,next) => {
+exports.logout = (req, res, next) => {
     const token = req.cookies.token
     res.cookie("isLoggedIn", false);
-    res.cookie('token',token, {httpOnly: true, expires: new Date(Date.now())})
+    res.cookie('token', token, {httpOnly: true, maxAge: 0})
     res.status(200).json({status: 200, message: "Logged out successfully"})
+}
+
+exports.authorize = async (req,res,next) => {
+    const token = req.cookies.token
+    const payload = jwt.verify(token, process.env.SecretJWT)
+    try {
+        const {_id, username, chats} = await User.findById(payload.userId)
+        res.status(200).json({status:200,_id,username,chats})
+
+    }catch(err){
+        next(err)
+    }
 }

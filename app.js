@@ -34,6 +34,7 @@ app.use('/api', userRoutes);
 app.use((error,req,res,next) => {
     const statusCode = error.statusCode || 500;
     const message = error.message || "An error occurred, no message";
+    console.log("Error: ", message)
     res.status(statusCode).json({type: "Error", status:statusCode, message})
 })
 

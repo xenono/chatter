@@ -8,8 +8,9 @@ exports.authorizeJWT = (req, res, next) => {
         decodedToken = jwt.verify(token, process.env.SecretJWT);
     }catch(err){
         res.cookie("isLoggedIn", false)
-        res.cookie('token', token, {httpOnly: true, expires: new Date(Date.now())})
+        res.cookie('token', token, {httpOnly: true, maxAge:0})
         err.statusCode = 500
+        err.message = "Missing or malformed token!"
         return next(err)
     }
     if(!decodedToken){

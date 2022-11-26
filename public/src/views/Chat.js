@@ -1,26 +1,29 @@
 import React from 'react';
 import styled from 'styled-components'
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import MainTemplate from "../templates/MainTemplate";
 import ChatNavigation from "../components/ChatNavigation";
 import ChatBox from "../components/ChatBox";
 import FriendsList from "../components/FriendsList";
+import Auth from "../hoc/Auth";
 
 const ChatWrapper = styled.div`
-    height:90vh;
-    display: flex;
-    justify-content: space-between;
-    background-color: ${({theme}) => theme.normal};
+  height: 90vh;
+  display: flex;
+  justify-content: space-between;
+  background-color: ${({theme}) => theme.normal};
 `
-const Chat = ({state})  => {
-    console.log(state)
+const Chat = ({state, cookies}) => {
+
     return (
         <MainTemplate>
-            <ChatWrapper>
-                <ChatNavigation/>
-                <ChatBox/>
-                <FriendsList/>
-            </ChatWrapper>
+            <Auth cookies={cookies}>
+                <ChatWrapper>
+                    <ChatNavigation/>
+                    <ChatBox/>
+                    <FriendsList/>
+                </ChatWrapper>
+            </Auth>
         </MainTemplate>
     );
 };
@@ -29,8 +32,6 @@ const mapStateToProps = (state) => {
     return {state}
 };
 
-Chat.propTypes = {
-
-};
+Chat.propTypes = {};
 
 export default connect(mapStateToProps)(Chat)
