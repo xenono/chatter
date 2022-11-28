@@ -20,7 +20,7 @@ const Chat = ({state, cookies}) => {
             <Auth cookies={cookies}>
                 <ChatWrapper>
                     <ChatNavigation/>
-                    <ChatBox/>
+                    <ChatBox chat={state.activeChat}/>
                     <FriendsList/>
                 </ChatWrapper>
             </Auth>

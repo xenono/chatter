@@ -98,8 +98,7 @@ const DateText = styled.span`
   color: ${({theme}) => theme.sLight};
 `
 
-const ChatBox = props => {
-
+const ChatBox = ({chat}) => {
     const [messages, setMessages] = useState([]);
 
     const onSubmit = e => {
@@ -117,7 +116,7 @@ const ChatBox = props => {
     return (
         <Wrapper>
             <ChatName>
-                <h3 className="text-center p-1 pt-2 mb-2">Public Chat</h3>
+                <h3 className="text-center p-1 pt-2 mb-2">{chat.name}</h3>
             </ChatName>
             <Chat>
                 {messages.length && messages.map(msg => (

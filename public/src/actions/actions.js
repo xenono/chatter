@@ -6,6 +6,8 @@ export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS"
 export const LOGOUT_FAILED = "LOGOUT_FAILED"
 export const AUTH_SUCCESS = "AUTH_SUCCESS"
 export const AUTH_FAILED = "AUTH_FAILED"
+export const SET_ACTIVE_CHAT_SUCCESS = "SET_ACTIVE_CHAT_SUCCESS"
+export const SET_ACTIVE_CHAT_FAILED = "SET_ACTIVE_CHAT_FAILED"
 export const API_URL = process.env.REACT_APP_API_URL
 
 export const login = (username,password) => async dispatch => {
@@ -64,4 +66,20 @@ export const authorize = () => async dispatch => {
             error: err.message
         })
     }
+}
+
+export const fetchChats = () => async dispatch => {
+}
+
+export const setActiveChat = (chatId,chatName) => async dispatch => {
+    const chat = {
+        id: chatId,
+        name:chatName
+    }
+    dispatch({
+        type: SET_ACTIVE_CHAT_SUCCESS,
+        payload: {
+            chat
+        }
+    })
 }
