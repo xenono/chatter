@@ -13,15 +13,18 @@ export const API_URL = process.env.REACT_APP_API_URL
 export const login = (username,password) => async dispatch => {
     try{
         const res = await axios.post(API_URL + "/login", {username,password},{withCredentials:true})
+        const publicChat = await axios.get(API_URL + "/getPublicChat",{withCredentials:true})
         if(res.data.status === 200){
             dispatch({
                 type: LOGIN_SUCCESS,
                 payload: {
-                    user: res.data.user
+                    user: res.data.user,
+                    chat: publicChat.data
                 }
             })
         }
     }catch(err){
+        console.log(err.message)
         dispatch({
             type: LOGIN_FAILED,
             error: err.message
@@ -48,6 +51,7 @@ export const logout = () => async dispatch => {
 export const authorize = () => async dispatch => {
     try {
         const res = await axios.post(API_URL + "/authorize", {},{withCredentials:true})
+        const publicChat = await axios.get(API_URL + "/getPublicChat",{withCredentials:true})
         if(res.data.status === 200){
             dispatch({
                 type: AUTH_SUCCESS,
@@ -56,7 +60,9 @@ export const authorize = () => async dispatch => {
                         _id: res.data._id,
                         username: res.data.username,
                     },
-                    chats: res.data.chats
+                    chats: res.data.chats,
+                    chat: publicChat.data
+
                 }
             })
         }
@@ -68,8 +74,10 @@ export const authorize = () => async dispatch => {
     }
 }
 
-export const fetchChats = () => async dispatch => {
+export const fetchChat = () => async dispatch => {
+
 }
+
 
 export const setActiveChat = (chatId,chatName) => async dispatch => {
     const chat = {

@@ -1,8 +1,29 @@
 const Chat = require('../models/chat')
+
 exports.getPublicChat = async (req,res,next) => {
+    try {
+        const chat = await Chat.findOne({name: "Public Chat"})
+        if(!chat){
+            const err = new Error("Chat not found!")
+            err.statusCode = 404
+            next(err)
+        }
+        res.status(200).json(chat)
+
+    }catch(err){
+
+        next(err)
+    }
+}
+exports.getChat = async (req,res,next) => {
     const { chatId } = req.body
     try {
         const chat = await Chat.findById(chatId)
+        if(!chat){
+            const err = new Error("Chat not found!")
+            err.statusCode = 404
+            next(err)
+        }
         res.status(200).json(chat)
 
     }catch(err){

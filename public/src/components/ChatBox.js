@@ -4,6 +4,7 @@ import styled from "styled-components";
 import RoundImage from "./RoundImage";
 import Astronaut from "./../assets/astronaut.jpg";
 import Tiger from "../assets/tiger.jpg"
+import {connect} from "react-redux";
 
 const Wrapper = styled.div`
   width: 70%;
@@ -100,19 +101,25 @@ const DateText = styled.span`
 
 const ChatBox = ({chat}) => {
     const [messages, setMessages] = useState([]);
-
     const onSubmit = e => {
         e.preventDefault();
         const message = e.target.message.value
         const newMessage = {
+                _id: messages.length,
                 author: "Astronaut",
                 image: Astronaut,
                 type: "text",
                 content: message,
-                date: new Date(Date.now())
+                createdAt: Date.now()
             }
         setMessages([...messages, newMessage])
     }
+    useEffect(() => {
+        if(chat.id !== null){
+            setMessages(chat.messages)
+        }
+
+    },[chat])
     return (
         <Wrapper>
             <ChatName>
@@ -122,13 +129,13 @@ const ChatBox = ({chat}) => {
                 {messages.length && messages.map(msg => (
 
 
-                    <MessageStream className="mt-3" key={msg.date}>
+                    <MessageStream className="mt-3" key={msg._id}>
                         <div className="w-100">
                             <UserInfo className="d-flex mb-3">
-                                <RoundImageAbsolute src={msg.image}/>
+                                <RoundImageAbsolute src={Tiger}/>
                                 <div className="mt-auto mb-auto d-flex justify-content-between w-100">
-                                    <span className="text-warning">{msg.author}</span>
-                                    <DateText className="fw-normal fs-6">{msg.date.toDateString()}</DateText>
+                                    <span className="text-warning">{msg.username}</span>
+                                    <DateText className="fw-normal fs-6">{new Date(msg.createdAt).toDateString()}</DateText>
                                 </div>
                             </UserInfo>
                             <div className="p-l-1">
@@ -158,4 +165,10 @@ const ChatBox = ({chat}) => {
 
 ChatBox.propTypes = {};
 
-export default ChatBox;
+const mapStateToProps = ({activeChat}) => {
+    return {
+        chat:activeChat
+    }
+}
+
+export default connect(mapStateToProps)(ChatBox);

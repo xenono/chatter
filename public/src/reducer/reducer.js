@@ -13,8 +13,8 @@ const initialState = {
     isLoggedIn: false,
     chats:[],
     activeChat: {
-        id: 0,
-        name: "Public chat"
+        id: null,
+        name: null
     }
 }
 
@@ -24,7 +24,8 @@ const rootReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLoggedIn: true,
-                user: action.payload.user
+                user: action.payload.user,
+                activeChat: action.payload.chat
             }
         case LOGOUT_SUCCESS:
             return initialState
@@ -33,7 +34,9 @@ const rootReducer = (state = initialState, action) => {
                 ...state,
                 user: action.payload.user,
                 chats: action.payload.chats,
-                isLoggedIn: true
+                isLoggedIn: true,
+                activeChat: action.payload.chat
+
             }
         case SET_ACTIVE_CHAT_SUCCESS:
             return {

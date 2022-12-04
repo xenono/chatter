@@ -5,6 +5,7 @@ import logo from '../assets/chat.png'
 import PropTypes from 'prop-types';
 import {Navigate} from "react-router-dom";
 import {login as loginAction} from "../actions/actions";
+import {API_URL} from "../actions/actions";
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -16,6 +17,8 @@ const Form = styled.form`
   box-shadow: 4px 4px 6px #c4c4c4;
 `
 const Login = ({login, isLoggedIn}) => {
+
+
     const onSubmit = (e) => {
         e.preventDefault();
         const username = e.target.username.value;

@@ -1,8 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
+import axios from 'axios'
+
 import PropTypes from 'prop-types';
 import logo from "../assets/chat.png";
-import {useNavigate} from "react-router-dom";
+import {Navigate, useNavigate} from "react-router-dom";
 import styled from "styled-components";
+import {API_URL} from "../actions/actions";
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -15,15 +18,24 @@ const Form = styled.form`
 `
 
 const Signup = props => {
-    const navigate = useNavigate()
-    const onSubmit = (e) => {
+    const [isFormSubmit, setFormSubmit] = useState(false)
+    const onSubmit = async (e) => {
         e.preventDefault();
         const username = e.target.username.value;
         const password = e.target.password.value;
-        const confirmPassword = e.target.password.value;
+        const confirmPassword = e.target.confirmPassword.value;
+        try {
+            await axios.post(API_URL + "/signup",{username,password,confirmPassword})
+            setFormSubmit(true)
+        }catch(err){
+            console.log(err.response.data)
+            setFormSubmit(false)
+        }
 
     }
-
+    if(isFormSubmit === true){
+        return <Navigate to="/chat" />
+    }
     return (
         <Wrapper className="d-flex justify-content-center align-items-center">
             <Form className="form-signin text-center" onSubmit={onSubmit}>
