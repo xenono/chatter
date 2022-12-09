@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useMemo} from 'react';
 import PropTypes from 'prop-types';
 import styled from "styled-components";
 import RoundImage from "./RoundImage";
@@ -100,11 +100,12 @@ const DateText = styled.span`
 `
 
 const ChatBox = ({chat}) => {
-    const [messages, setMessages] = useState([]);
-    const onSubmit = e => {
-        e.preventDefault();
-        const message = e.target.message.value
-        const newMessage = {
+        const [messages, setMessages] = useState([]);
+        const [activeChat, setActiveChat] = useState({_id: "", name: "", messages: []})
+        const onSubmit = e => {
+            e.preventDefault();
+            const message = e.target.message.value
+            const newMessage = {
                 _id: messages.length,
                 author: "Astronaut",
                 image: Astronaut,
@@ -112,62 +113,72 @@ const ChatBox = ({chat}) => {
                 content: message,
                 createdAt: Date.now()
             }
-        setMessages([...messages, newMessage])
-    }
-    useEffect(() => {
-        if(chat.id !== null){
-            setMessages(chat.messages)
+            setMessages([...messages, newMessage])
         }
+        useEffect(() => {
+            setActiveChat(chat)
+            setMessages(chat.messages)
 
-    },[chat])
-    return (
-        <Wrapper>
-            <ChatName>
-                <h3 className="text-center p-1 pt-2 mb-2">{chat.name}</h3>
-            </ChatName>
-            <Chat>
-                {messages.length && messages.map(msg => (
+        }, [chat, activeChat, messages])
+        return (
+            <Wrapper>
+                {messages ? (
+                    <>
+                        <ChatName>
+                            <h3 className="text-center p-1 pt-2 mb-2">{activeChat.name}</h3>
+                        </ChatName>
+                        <Chat>
+                            {messages.length && messages.map(msg => (
 
 
-                    <MessageStream className="mt-3" key={msg._id}>
-                        <div className="w-100">
-                            <UserInfo className="d-flex mb-3">
-                                <RoundImageAbsolute src={Tiger}/>
-                                <div className="mt-auto mb-auto d-flex justify-content-between w-100">
-                                    <span className="text-warning">{msg.username}</span>
-                                    <DateText className="fw-normal fs-6">{new Date(msg.createdAt).toDateString()}</DateText>
-                                </div>
-                            </UserInfo>
-                            <div className="p-l-1">
+                                <MessageStream className="mt-3" key={msg._id}>
+                                    <div className="w-100">
+                                        <UserInfo className="d-flex mb-3">
+                                            <RoundImageAbsolute src={Tiger}/>
+                                            <div className="mt-auto mb-auto d-flex justify-content-between w-100">
+                                                <span className="text-warning">{msg.username}</span>
+                                                <DateText
+                                                    className="fw-normal fs-6">{new Date(msg.createdAt).toDateString()}</DateText>
+                                            </div>
+                                        </UserInfo>
+                                        <div className="p-l-1">
 
-                                <MessageBox>
-                                    <MessageContent>
-                                        {msg.content}
-                                    </MessageContent>
-                                </MessageBox>
-                            </div>
+                                            <MessageBox>
+                                                <MessageContent>
+                                                    {msg.content}
+                                                </MessageContent>
+                                            </MessageBox>
+                                        </div>
 
-                        </div>
-                    </MessageStream>
-                ))}
-            </Chat>
-            <NewMessageForm onSubmit={onSubmit} className="d-flex align-items-center justify-content-around" autocomplete="off">
-                <Input type="text" name="message" id="message" placeholder="New message" />
-                <Button className="btn btn-large" type="submit" onKeyPress={(e) => {
-                    if (e.key === "enter") {
-                        onSubmit(e)
-                    }
-                }}>Send</Button>
-            </NewMessageForm>
-        </Wrapper>
-    );
-};
+                                    </div>
+                                </MessageStream>
+                            ))}
+                        </Chat>
+                        <NewMessageForm onSubmit={onSubmit} className="d-flex align-items-center justify-content-around"
+                                        autocomplete="off">
+                            <Input type="text" name="message" id="message" placeholder="New message"/>
+                            <Button className="btn btn-large" type="submit" onKeyPress={(e) => {
+                                if (e.key === "enter") {
+                                    onSubmit(e)
+                                }
+                            }}>Send</Button>
+                        </NewMessageForm>
+                    </>
+                ) : (
+                    <div className="w-100 h-100 d-flex justify-content-center align-items-center">
+                        <h1 className="text-white">Loading...</h1>
+                    </div>
+                )}
+            </Wrapper>
+        );
+    }
+;
 
 ChatBox.propTypes = {};
 
 const mapStateToProps = ({activeChat}) => {
     return {
-        chat:activeChat
+        chat: activeChat
     }
 }
 

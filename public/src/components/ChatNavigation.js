@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components'
 import PublicChatIcon from '../assets/public_chat.png';
 import PropTypes from 'prop-types';
@@ -21,42 +21,27 @@ const ChatRoomTile = styled.div`
     background-color: ${({theme}) => theme.normal};
     cursor: pointer;
   }
-  
+
 `
 
-const chats = [
-    {
-        id: 0,
-        name: "Public chat"
-    },
-    {
-        id: 1,
-        name: "Chat 1"
-    },
-    {
-        id: 2,
-        name: "Chat 2"
-    },
-    {
-        id: 3,
-        name: "Chat 3"
-    },
-    {
-        id: 4,
-        name: "Chat 4"
+const ChatNavigation = ({activeChat, setActiveChat, chats}) => {
+    const [chatNav, setChatNav] = useState([])
+    const handleChatClick = (id, name) => {
+        setActiveChat(id, name)
     }
-]
-
-const ChatNavigation = ({activeChat,setActiveChat}) => {
-    const handleChatClick = (id,name) => {
-        setActiveChat(id,name)
-    }
+    useEffect(() => {
+        setChatNav(chats)
+    }, [chats])
     return (
         <Wrapper>
+            {chatNav.length ? (
+                <>
             <h3 className="text-center p-1 pt-2 mb-2">Chat rooms</h3>
             <ChatRoomsWrapper className="d-flex flex-column">
-                {chats.length && chats.map(chat => (
-                    <ChatRoomTile className="d-flex align-items-center p-2" onClick={() => handleChatClick(chat.id,chat.name)} key={chat.id} isActive={chat.id === activeChat}>
+                {chatNav.length && chatNav.map(chat => (
+                    <ChatRoomTile className="d-flex align-items-center p-2"
+                                  onClick={() => handleChatClick(chat._id, chat.name)} key={chat._id}
+                                  isActive={chat._id === activeChat._id}>
                         <RoundImage src={PublicChatIcon} alt=""/>
                         <div className="text-center d-flex align-content-around flex-column">
                             <p className="m-0">{chat.name}</p>
@@ -66,20 +51,27 @@ const ChatNavigation = ({activeChat,setActiveChat}) => {
                 ))}
 
             </ChatRoomsWrapper>
+                </>
+            ):(
+                <div className="w-100 h-100 d-flex justify-content-center align-items-center">
+                    <h1 className="text-white">Loading...</h1>
+                </div>
+            )}
         </Wrapper>
     );
 };
 
-const mapStateToProps = ({activeChat}) => {
+const mapStateToProps = ({activeChat, chats}) => {
     return {
-        activeChat
+        activeChat,
+        chats
     }
 }
 
 const mapDispatchToProps = dispatch => ({
-    setActiveChat: (chatId,chatName) => dispatch(setActiveChatAction(chatId,chatName))
+    setActiveChat: (chatId, chatName) => dispatch(setActiveChatAction(chatId, chatName))
 })
 
 ChatNavigation.propTypes = {};
 
-export default connect(mapStateToProps,mapDispatchToProps)(ChatNavigation);
+export default connect(mapStateToProps, mapDispatchToProps)(ChatNavigation);

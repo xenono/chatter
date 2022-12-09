@@ -15,9 +15,15 @@ const userSchema = new Schema ({
     profileImage: {
         type:String,
     },
-    chats: [{
-        type: String
-    }]
+    chats: [
+        {
+            _id: {
+                type: Schema.Types.ObjectId
+            },
+            name: {
+                type:String
+            }
+        }]
 })
 
 module.exports = mongoose.model("User",userSchema)
