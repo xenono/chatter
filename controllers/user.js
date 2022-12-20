@@ -32,3 +32,13 @@ exports.createUser = async (req,res,next) => {
         next(err)
     }
 }
+
+exports.getAllUsers = async (req,res,next) => {
+    try {
+        console.log(req.userId)
+        const users = await User.find({_id: {$ne: req.userId}}).select("username")
+        res.status(200).json({status:200,users})
+    }catch(err){
+        next(err)
+    }
+}

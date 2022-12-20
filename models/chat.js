@@ -8,6 +8,16 @@ const chatSchema = new Schema ({
         type: String,
         required:true,
     },
+    admin: {
+        username: {
+            type:String,
+            required:true
+        },
+        _id: {
+            type: Object,
+            required: true,
+        }
+    },
     messages: [{
         username: {
             type: String,
@@ -24,9 +34,13 @@ const chatSchema = new Schema ({
 
     }],
     members: [{
-        userId: {
+        _id: {
             type: Object,
             required: true,
+        },
+        username: {
+            type: String,
+            required:true
         }
     }]
 })

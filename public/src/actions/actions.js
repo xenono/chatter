@@ -6,6 +6,8 @@ export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS"
 export const LOGOUT_FAILED = "LOGOUT_FAILED"
 export const AUTH_SUCCESS = "AUTH_SUCCESS"
 export const AUTH_FAILED = "AUTH_FAILED"
+export const SEND_MESSAGE_SUCCESS = "SEND_MESSAGE_SUCCESS"
+export const SEND_MESSAGE_FAILED = "SEND_MESSAGE_FAILED"
 export const SET_ACTIVE_CHAT_SUCCESS = "SET_ACTIVE_CHAT_SUCCESS"
 export const SET_ACTIVE_CHAT_FAILED = "SET_ACTIVE_CHAT_FAILED"
 export const API_URL = process.env.REACT_APP_API_URL
@@ -19,7 +21,9 @@ export const login = (username,password) => async dispatch => {
                 type: LOGIN_SUCCESS,
                 payload: {
                     user: res.data.user,
-                    chat: publicChat.data
+                    chat: publicChat.data,
+                    users: res.data.users
+
                 }
             })
         }
@@ -61,7 +65,8 @@ export const authorize = () => async dispatch => {
                         username: res.data.username,
                     },
                     chats: res.data.chats,
-                    chat: publicChat.data
+                    chat: publicChat.data,
+                    users: res.data.users
 
                 }
             })
@@ -79,15 +84,44 @@ export const fetchChat = () => async dispatch => {
 }
 
 
-export const setActiveChat = (chatId,chatName) => async dispatch => {
-    const chat = {
-        id: chatId,
-        name:chatName
+export const setActiveChat = (chatId) => async dispatch => {
+    try {
+        const res = await axios.get(API_URL + "/chat/" + chatId,{withCredentials:true})
+        dispatch({
+            type: SET_ACTIVE_CHAT_SUCCESS,
+            payload: {
+                chat: res.data.chat
+            }
+        })
+    }catch(err){
+        dispatch({
+            type: SET_ACTIVE_CHAT_FAILED,
+            error: err.message
+        })
     }
-    dispatch({
-        type: SET_ACTIVE_CHAT_SUCCESS,
-        payload: {
-            chat
+
+
+}
+
+export const sendMessage = (chatId, username, content) => async dispatch => {
+    try {
+        await axios.post(API_URL + "/chat/send",{chatId,username,content},{withCredentials:true})
+        const message = {
+            username,
+            content,
+            createdAt: Date.now(),
+            _id: chatId
         }
-    })
+        dispatch({
+            type: SEND_MESSAGE_SUCCESS,
+            payload: {
+                message
+            }
+        })
+    }catch(err){
+        dispatch({
+            type: SEND_MESSAGE_FAILED,
+            error: err.message
+        })
+    }
 }

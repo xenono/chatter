@@ -5,6 +5,7 @@ import RoundImage from "./RoundImage";
 import Astronaut from "./../assets/astronaut.jpg";
 import Tiger from "../assets/tiger.jpg"
 import {connect} from "react-redux";
+import {sendMessage, sendMessage as sendMessageAction} from "../actions/actions";
 
 const Wrapper = styled.div`
   width: 70%;
@@ -50,6 +51,7 @@ const Chat = styled.div`
   width: 80%;
   margin: 0 auto;
   position: relative;
+  padding-bottom: 80px;
 `
 const MessageContent = styled.div``;
 const MessageStream = styled.div``;
@@ -99,27 +101,20 @@ const DateText = styled.span`
   color: ${({theme}) => theme.sLight};
 `
 
-const ChatBox = ({chat}) => {
+const ChatBox = ({chat,user,sendMessage}) => {
         const [messages, setMessages] = useState([]);
         const [activeChat, setActiveChat] = useState({_id: "", name: "", messages: []})
         const onSubmit = e => {
             e.preventDefault();
             const message = e.target.message.value
-            const newMessage = {
-                _id: messages.length,
-                author: "Astronaut",
-                image: Astronaut,
-                type: "text",
-                content: message,
-                createdAt: Date.now()
-            }
-            setMessages([...messages, newMessage])
+            sendMessage(chat._id,user.username,message)
         }
         useEffect(() => {
-            setActiveChat(chat)
-            setMessages(chat.messages)
-
-        }, [chat, activeChat, messages])
+            if(activeChat && chat){
+                setActiveChat(chat)
+                setMessages(chat.messages)
+            }
+        }, [chat, activeChat._id, messages])
         return (
             <Wrapper>
                 {messages ? (
@@ -133,10 +128,10 @@ const ChatBox = ({chat}) => {
 
                                 <MessageStream className="mt-3" key={msg._id}>
                                     <div className="w-100">
-                                        <UserInfo className="d-flex mb-3">
-                                            <RoundImageAbsolute src={Tiger}/>
+                                        <UserInfo className="d-flex mb-2">
+                                            {/*<RoundImageAbsolute src={Tiger}/>*/}
                                             <div className="mt-auto mb-auto d-flex justify-content-between w-100">
-                                                <span className="text-warning">{msg.username}</span>
+                                                <span className="text-warning h5">{msg.username}</span>
                                                 <DateText
                                                     className="fw-normal fs-6">{new Date(msg.createdAt).toDateString()}</DateText>
                                             </div>
@@ -176,10 +171,15 @@ const ChatBox = ({chat}) => {
 
 ChatBox.propTypes = {};
 
-const mapStateToProps = ({activeChat}) => {
+const mapStateToProps = ({activeChat,user}) => {
     return {
-        chat: activeChat
+        chat: activeChat,
+        user
     }
 }
 
-export default connect(mapStateToProps)(ChatBox);
+const mapDispatchToProps = dispatch => ({
+        sendMessage: (chatId,username,content) => dispatch(sendMessageAction(chatId,username,content))
+    })
+
+export default connect(mapStateToProps,mapDispatchToProps)(ChatBox);

@@ -13,7 +13,31 @@ const Wrapper = styled.div`
   background-color: ${({theme}) => theme.dark};
 `
 
-const ChatRoomsWrapper = styled.div``
+const ChatRoomsWrapper = styled.div`
+  height: 95%;
+  overflow-y: auto;
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  /* Track */
+
+  ::-webkit-scrollbar-track {
+    background: ${({theme}) => theme.normal};
+  }
+
+  /* Handle */
+
+  ::-webkit-scrollbar-thumb {
+    background: ${({theme}) => theme.light};
+  }
+
+  /* Handle on hover */
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+`
 const ChatRoomTile = styled.div`
   background-color: ${({isActive, theme}) => isActive ? theme.normal : theme.dark};
 
@@ -24,23 +48,36 @@ const ChatRoomTile = styled.div`
 
 `
 
-const ChatNavigation = ({activeChat, setActiveChat, chats}) => {
+const AddNewChatWrapper = styled.div`
+  height: 5%;
+`
+
+const Button = styled.button`
+  color:white;
+  :hover {
+    background-color: white;
+    color: black;
+  }
+`
+
+const ChatNavigation = ({activeChat, setActiveChat, chats, setModalActive}) => {
     const [chatNav, setChatNav] = useState([])
-    const handleChatClick = (id, name) => {
-        setActiveChat(id, name)
+    const handleChatClick = (id,name) => {
+        setActiveChat({_id:id,name})
     }
     useEffect(() => {
         setChatNav(chats)
     }, [chats])
     return (
-        <Wrapper>
+        <Wrapper className="d-flex justify-content-between flex-column">
+
+            <h3 className="text-center p-1 pt-2 mb-2">Chat rooms</h3>
             {chatNav.length ? (
                 <>
-            <h3 className="text-center p-1 pt-2 mb-2">Chat rooms</h3>
             <ChatRoomsWrapper className="d-flex flex-column">
                 {chatNav.length && chatNav.map(chat => (
                     <ChatRoomTile className="d-flex align-items-center p-2"
-                                  onClick={() => handleChatClick(chat._id, chat.name)} key={chat._id}
+                                  onClick={() => handleChatClick(chat._id,chat.name)} key={chat._id}
                                   isActive={chat._id === activeChat._id}>
                         <RoundImage src={PublicChatIcon} alt=""/>
                         <div className="text-center d-flex align-content-around flex-column">
@@ -57,6 +94,9 @@ const ChatNavigation = ({activeChat, setActiveChat, chats}) => {
                     <h1 className="text-white">Loading...</h1>
                 </div>
             )}
+            <AddNewChatWrapper className="mb-1">
+                <Button className="btn btn-lg w-100 fs-5 border" onClick={() => setModalActive(true)}>Create new chat</Button>
+            </AddNewChatWrapper>
         </Wrapper>
     );
 };

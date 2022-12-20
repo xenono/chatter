@@ -2,7 +2,7 @@ import {
     LOGIN_FAILED,
     LOGOUT_SUCCESS,
     LOGIN_SUCCESS,
-    LOGOUT_FAILED, AUTH_SUCCESS, SET_ACTIVE_CHAT_SUCCESS
+    LOGOUT_FAILED, AUTH_SUCCESS, SET_ACTIVE_CHAT_SUCCESS, SEND_MESSAGE_SUCCESS
 } from "../actions/actions";
 
 const initialState = {
@@ -12,6 +12,7 @@ const initialState = {
     },
     isLoggedIn: false,
     chats:[],
+    users:[],
     activeChat: {
         id: null,
         name: null
@@ -25,7 +26,9 @@ const rootReducer = (state = initialState, action) => {
                 ...state,
                 isLoggedIn: true,
                 user: action.payload.user,
-                activeChat: action.payload.chat
+                activeChat: action.payload.chat,
+                users: action.payload.users
+
             }
         case LOGOUT_SUCCESS:
             return initialState
@@ -35,8 +38,17 @@ const rootReducer = (state = initialState, action) => {
                 user: action.payload.user,
                 chats: action.payload.chats,
                 isLoggedIn: true,
-                activeChat: action.payload.chat
+                activeChat: action.payload.chat,
+                users: action.payload.users
 
+            }
+        case SEND_MESSAGE_SUCCESS:
+            return {
+                ...state,
+                activeChat: {
+                    ...state.activeChat,
+                    messages: [...state.activeChat.messages, action.payload.message]
+                }
             }
         case SET_ACTIVE_CHAT_SUCCESS:
             return {
