@@ -10,6 +10,8 @@ export const SEND_MESSAGE_SUCCESS = "SEND_MESSAGE_SUCCESS"
 export const SEND_MESSAGE_FAILED = "SEND_MESSAGE_FAILED"
 export const SET_ACTIVE_CHAT_SUCCESS = "SET_ACTIVE_CHAT_SUCCESS"
 export const SET_ACTIVE_CHAT_FAILED = "SET_ACTIVE_CHAT_FAILED"
+export const CREATE_NEW_CHAT_SUCCESS = "CREATE_NEW_CHAT_SUCCESS"
+export const CREATE_NEW_CHAT_FAILED = "CREATE_NEW_CHAT_FAILED"
 export const API_URL = process.env.REACT_APP_API_URL
 
 export const login = (username,password) => async dispatch => {
@@ -78,12 +80,6 @@ export const authorize = () => async dispatch => {
         })
     }
 }
-
-export const fetchChat = () => async dispatch => {
-
-}
-
-
 export const setActiveChat = (chatId) => async dispatch => {
     try {
         const res = await axios.get(API_URL + "/chat/" + chatId,{withCredentials:true})
@@ -121,6 +117,27 @@ export const sendMessage = (chatId, username, content) => async dispatch => {
     }catch(err){
         dispatch({
             type: SEND_MESSAGE_FAILED,
+            error: err.message
+        })
+    }
+}
+
+export const createNewChat = (chatName, users) => async dispatch => {
+    const newChat = {
+        chatName,
+        users
+    }
+    try {
+        const res =  await axios.post(API_URL + '/chat/create',newChat,{withCredentials:true})
+        dispatch({
+            type: CREATE_NEW_CHAT_SUCCESS,
+            payload: {
+                chat:res.data.chat
+            }
+        })
+    }catch(err){
+        dispatch({
+            type: CREATE_NEW_CHAT_FAILED,
             error: err.message
         })
     }

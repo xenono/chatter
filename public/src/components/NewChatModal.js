@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect} from "react-redux";
 import RoundImage from "./RoundImage";
 import UserImage from "../assets/user.png";
+import {createNewChat as createNewChatAction} from "../actions/actions";
 
 const Wrapper = styled.div`
   max-height: 90vh;
@@ -25,15 +26,19 @@ const UsersChecklist = styled.div`
   padding: 10px;
 `
 
-const NewChatModal = ({setModalActive, users}) => {
+const NewChatModal = ({setModalActive, users, createNewChat}) => {
 
     const handleForm = (e) => {
         e.preventDefault()
         const chatName = e.target.chatName.value
         // Filters inputs to return an array of checked checkboxes only
         const pickedUsers = Array.prototype.slice.call(e.target.users).filter(input => input.checked)
-        console.log(chatName)
-        console.log(pickedUsers)
+        const users = []
+        for(const input of pickedUsers){
+            users.push({username:input.dataset.name, _id: input.value})
+        }
+        createNewChat(chatName, users)
+        setModalActive(false)
     }
     return (
         <Wrapper className="w-100 h-100 position-absolute d-flex justify-content-center align-items-center" >
@@ -48,8 +53,8 @@ const NewChatModal = ({setModalActive, users}) => {
                         </div>
                         <UsersChecklist className="mt-3">
                             {users && users.length ? users.map(user => (
-                                <div className="form-check">
-                                    <input className="form-check-input" type="checkbox" value={user._id} name="users"/>
+                                <div className="form-check" key={user._id}>
+                                    <input className="form-check-input" type="checkbox" value={user._id} name="users" data-name={user.username}/>
                                     <label className="form-check-label" htmlFor="flexCheckDefault">
                                         {user.username}
                                     </label>
@@ -78,4 +83,8 @@ const mapStateToProps = ({users}) => {
     }
 }
 
-export default connect(mapStateToProps)(NewChatModal);
+const mapDispatchToProps = dispatch => ({
+    createNewChat: (chatName,users) => dispatch(createNewChatAction(chatName,users))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewChatModal);

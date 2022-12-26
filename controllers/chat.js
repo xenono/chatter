@@ -18,7 +18,6 @@ exports.getPublicChat = async (req, res, next) => {
 }
 exports.getChat = async (req, res, next) => {
     const {chatId} = req.params
-    console.log(chatId)
     try {
         const chat = await Chat.findById(chatId)
         if (!chat) {
@@ -70,10 +69,10 @@ exports.createNewChat = async (req, res, next) => {
         })
         const newChat = await chat.save()
         for(const member of members){
-            member.chats.push(newChat._id)
+            member.chats.push({_id:newChat._id,name:newChat.name})
             await member.save()
         }
-        res.status(200).json({status:200})
+        res.status(200).json({status:200,chat:{name:newChat.name,_id:newChat._id}})
     } catch (err) {
         next(err)
     }
