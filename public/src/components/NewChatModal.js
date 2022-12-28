@@ -24,6 +24,8 @@ const UsersChecklist = styled.div`
   border: 1px solid ${({theme}) => theme.light};
   border-radius: 10px;
   padding: 10px;
+  max-height: 200px;
+  overflow-y: auto;
 `
 
 const NewChatModal = ({setModalActive, users, createNewChat}) => {
@@ -46,12 +48,12 @@ const NewChatModal = ({setModalActive, users, createNewChat}) => {
             <Modal className="w-50 h-75 bg-dark border-warning border border-1">
                 <div className="d-flex flex-column text-white">
                     <h3 className="m-2 text-center">Create new chat</h3>
-                    <form action="" className="d-flex flex-column w-50 m-auto" onSubmit={handleForm}>
-                        <div className="form-group mt-3">
+                    <form action="" className="d-flex flex-column w-50 m-auto align-items-center" onSubmit={handleForm}>
+                        <div className="form-group mt-3 w-75">
                             <label htmlFor="chatName" className="text-center mb-1">Chat Name</label>
                             <input type="text" name="chatName" id="chatName" className="form-control"/>
                         </div>
-                        <UsersChecklist className="mt-3">
+                        <UsersChecklist className="mt-3 w-75">
                             {users && users.length ? users.map(user => (
                                 <div className="form-check" key={user._id}>
                                     <input className="form-check-input" type="checkbox" value={user._id} name="users" data-name={user.username}/>
@@ -65,7 +67,7 @@ const NewChatModal = ({setModalActive, users, createNewChat}) => {
                             )}
                         </UsersChecklist>
 
-                        <button className="btn btn-lg text-white">Create</button>
+                        <button className="btn btn-lg text-white btn-warning w-50 mt-3 ml-auto mr-auto">Create</button>
                     </form>
                 </div>
             </Modal>

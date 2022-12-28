@@ -19,7 +19,7 @@ const FriendsList = ({users}) => {
     console.log(users)
     return (
         <Wrapper>
-            <h3 className="text-center p-1 pt-2 mb-2">Your friends</h3>
+            <h3 className="text-center p-1 pt-2 mb-2">All users</h3>
             <div className="pl-3 pr-3">
                 {users && users.length ? users.map(user => (
                     <FriendTile className="d-flex align-items-center justify-content-start mt-3" key={user._id}>

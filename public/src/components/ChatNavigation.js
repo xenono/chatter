@@ -53,6 +53,7 @@ const AddNewChatWrapper = styled.div`
 `
 
 const Button = styled.button`
+  border-radius: 0;
   color:white;
   :hover {
     background-color: white;

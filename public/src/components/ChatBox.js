@@ -6,14 +6,35 @@ import Astronaut from "./../assets/astronaut.jpg";
 import Tiger from "../assets/tiger.jpg"
 import {connect} from "react-redux";
 import {sendMessage, sendMessage as sendMessageAction} from "../actions/actions";
+import ChatMembersList from "./ChatMembersList";
 
 const Wrapper = styled.div`
   width: 70%;
   background-color: ${({theme}) => theme.normal};
-  overflow-y: scroll;
-  padding-bottom: 10px;
-  /* width */
+ 
+`
+const ChatName = styled.div`
+  position: relative;
+  width: 100%;
+  background-color: ${({theme}) => theme.dark};
+  color: ${({theme}) => theme.sLight};
+  border-bottom: 1px solid ${({theme}) => theme.light};
 
+`
+const MessageBox = styled.div`
+  color: #c2c3c5;
+`
+
+const Chat = styled.div`
+  width: 100%;
+  z-index: 0;
+  overflow-y: scroll;
+  max-height: 90%;
+  position: relative;
+  padding-bottom: 50px;
+  padding-right: 7.5%;
+  padding-left: 7.5%;
+  /* width */
   ::-webkit-scrollbar {
     width: 10px;
   }
@@ -35,23 +56,6 @@ const Wrapper = styled.div`
   ::-webkit-scrollbar-thumb:hover {
     background: #555;
   }
-`
-const ChatName = styled.div`
-  width: 100%;
-  background-color: ${({theme}) => theme.dark};
-  color: ${({theme}) => theme.sLight};
-  border-bottom: 1px solid ${({theme}) => theme.light};
-
-`
-const MessageBox = styled.div`
-  color: #c2c3c5;
-`
-
-const Chat = styled.div`
-  width: 80%;
-  margin: 0 auto;
-  position: relative;
-  padding-bottom: 80px;
 `
 const MessageContent = styled.div``;
 const MessageStream = styled.div``;
@@ -103,6 +107,7 @@ const DateText = styled.span`
 
 const ChatBox = ({chat,user,sendMessage}) => {
         const [messages, setMessages] = useState([]);
+        const [chatBottom, setChatBottom] = useState(null);
         const [activeChat, setActiveChat] = useState({_id: "", name: "", messages: []})
         const onSubmit = e => {
             e.preventDefault();
@@ -114,6 +119,9 @@ const ChatBox = ({chat,user,sendMessage}) => {
                 setActiveChat(chat)
                 setMessages(chat.messages)
             }
+            if(chatBottom) {
+                chatBottom.scrollIntoView({behavior: "smooth"})
+            }
         }, [chat, activeChat._id, messages])
         return (
             <Wrapper>
@@ -121,6 +129,7 @@ const ChatBox = ({chat,user,sendMessage}) => {
                     <>
                         <ChatName>
                             <h3 className="text-center p-1 pt-2 mb-2">{activeChat.name}</h3>
+                            <ChatMembersList />
                         </ChatName>
                         <Chat>
                             {messages.length && messages.map(msg => (
@@ -145,6 +154,9 @@ const ChatBox = ({chat,user,sendMessage}) => {
                                             </MessageBox>
                                         </div>
 
+                                    </div>
+                                    <div style={{ float:"left", clear: "both" }}
+                                         ref={(el) => { setChatBottom(el); }}>
                                     </div>
                                 </MessageStream>
                             ))}
