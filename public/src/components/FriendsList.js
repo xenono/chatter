@@ -16,7 +16,6 @@ const FriendTile = styled.div`
 `
 
 const FriendsList = ({users}) => {
-    console.log(users)
     return (
         <Wrapper>
             <h3 className="text-center p-1 pt-2 mb-2">All users</h3>

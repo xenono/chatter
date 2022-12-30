@@ -1,5 +1,5 @@
 import axios from 'axios'
-
+import socket from "../socket/socket";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS"
 export const LOGIN_FAILED = "LOGIN_FAILED"
 export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS"
@@ -19,6 +19,7 @@ export const login = (username,password) => async dispatch => {
         const res = await axios.post(API_URL + "/login", {username,password},{withCredentials:true})
         const publicChat = await axios.get(API_URL + "/getPublicChat",{withCredentials:true})
         if(res.data.status === 200){
+            socket.connect()
             dispatch({
                 type: LOGIN_SUCCESS,
                 payload: {
@@ -59,6 +60,7 @@ export const authorize = () => async dispatch => {
         const res = await axios.post(API_URL + "/authorize", {},{withCredentials:true})
         const publicChat = await axios.get(API_URL + "/getPublicChat",{withCredentials:true})
         if(res.data.status === 200){
+            socket.connect()
             dispatch({
                 type: AUTH_SUCCESS,
                 payload: {

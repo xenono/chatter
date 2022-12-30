@@ -7,11 +7,12 @@ import Tiger from "../assets/tiger.jpg"
 import {connect} from "react-redux";
 import {sendMessage, sendMessage as sendMessageAction} from "../actions/actions";
 import ChatMembersList from "./ChatMembersList";
+import socket from "../socket/socket";
 
 const Wrapper = styled.div`
   width: 70%;
   background-color: ${({theme}) => theme.normal};
- 
+
 `
 const ChatName = styled.div`
   position: relative;
@@ -35,6 +36,7 @@ const Chat = styled.div`
   padding-right: 7.5%;
   padding-left: 7.5%;
   /* width */
+
   ::-webkit-scrollbar {
     width: 10px;
   }
@@ -105,21 +107,25 @@ const DateText = styled.span`
   color: ${({theme}) => theme.sLight};
 `
 
-const ChatBox = ({chat,user,sendMessage}) => {
+const ChatBox = ({chat, user, sendMessage}) => {
         const [messages, setMessages] = useState([]);
         const [chatBottom, setChatBottom] = useState(null);
         const [activeChat, setActiveChat] = useState({_id: "", name: "", messages: []})
+        socket.on("updateChat", (data) => {
+            console.log("new message has been sent to the active chat")
+            console.log(data)
+        })
         const onSubmit = e => {
             e.preventDefault();
             const message = e.target.message.value
-            sendMessage(chat._id,user.username,message)
+            sendMessage(chat._id, user.username, message)
         }
         useEffect(() => {
-            if(activeChat && chat){
+            if (activeChat && chat) {
                 setActiveChat(chat)
                 setMessages(chat.messages)
             }
-            if(chatBottom) {
+            if (chatBottom) {
                 chatBottom.scrollIntoView({behavior: "smooth"})
             }
         }, [chat, activeChat._id, messages])
@@ -129,7 +135,7 @@ const ChatBox = ({chat,user,sendMessage}) => {
                     <>
                         <ChatName>
                             <h3 className="text-center p-1 pt-2 mb-2">{activeChat.name}</h3>
-                            <ChatMembersList />
+                            <ChatMembersList/>
                         </ChatName>
                         <Chat>
                             {messages.length && messages.map(msg => (
@@ -155,8 +161,10 @@ const ChatBox = ({chat,user,sendMessage}) => {
                                         </div>
 
                                     </div>
-                                    <div style={{ float:"left", clear: "both" }}
-                                         ref={(el) => { setChatBottom(el); }}>
+                                    <div style={{float: "left", clear: "both"}}
+                                         ref={(el) => {
+                                             setChatBottom(el);
+                                         }}>
                                     </div>
                                 </MessageStream>
                             ))}
@@ -183,7 +191,7 @@ const ChatBox = ({chat,user,sendMessage}) => {
 
 ChatBox.propTypes = {};
 
-const mapStateToProps = ({activeChat,user}) => {
+const mapStateToProps = ({activeChat, user}) => {
     return {
         chat: activeChat,
         user
@@ -191,7 +199,7 @@ const mapStateToProps = ({activeChat,user}) => {
 }
 
 const mapDispatchToProps = dispatch => ({
-        sendMessage: (chatId,username,content) => dispatch(sendMessageAction(chatId,username,content))
-    })
+    sendMessage: (chatId, username, content) => dispatch(sendMessageAction(chatId, username, content))
+})
 
-export default connect(mapStateToProps,mapDispatchToProps)(ChatBox);
+export default connect(mapStateToProps, mapDispatchToProps)(ChatBox);

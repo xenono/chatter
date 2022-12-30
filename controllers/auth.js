@@ -24,7 +24,6 @@ exports.login = async (req, res, next) => {
         }
         token = jwt.sign({userId:user._id}, process.env.SecretJWT, {expiresIn: "1h"})
         const users = await User.find({_id: {$ne: req.userId}}).select("username")
-
         res.cookie('token', token, {httpOnly: true, maxAge: HOUR})
         res.cookie('isLoggedIn', true, {maxAge: HOUR})
         res.status(200).json({status: 200, user: {_id: user._id, username: user.username},chats:user.chats,users})
@@ -49,6 +48,8 @@ exports.authorize = async (req,res,next) => {
         const chat = await Chat.findOne({name: "Public Chat"})
         const users = await User.find({_id: {$ne: req.userId}}).select("username")
         const {_id, username, chats} = await User.findById(payload.userId)
+        // socket.getIO().join(chat._id)
+
         res.status(200).json({status:200,_id,username,chats,activeChat:chat,users})
 
     }catch(err){

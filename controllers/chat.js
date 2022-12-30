@@ -1,5 +1,6 @@
 const Chat = require('../models/chat')
 const User = require("../models/user")
+const io = require("../socket")
 
 exports.getPublicChat = async (req, res, next) => {
     try {
@@ -43,6 +44,8 @@ exports.sendMessage = async (req, res, next) => {
         }
         chat.messages.push(message)
         await chat.save();
+        io.getIO().to(chat._id.toString()).emit("updateChat",{dummy:1})
+
         res.status(200).json({status: 200})
 
     } catch (err) {
