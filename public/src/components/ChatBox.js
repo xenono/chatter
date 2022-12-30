@@ -5,7 +5,7 @@ import RoundImage from "./RoundImage";
 import Astronaut from "./../assets/astronaut.jpg";
 import Tiger from "../assets/tiger.jpg"
 import {connect} from "react-redux";
-import {sendMessage, sendMessage as sendMessageAction} from "../actions/actions";
+import {sendMessage as sendMessageAction, updateActiveChat as updateActiveChatAction} from "../actions/actions";
 import ChatMembersList from "./ChatMembersList";
 import socket from "../socket/socket";
 
@@ -107,14 +107,11 @@ const DateText = styled.span`
   color: ${({theme}) => theme.sLight};
 `
 
-const ChatBox = ({chat, user, sendMessage}) => {
+const ChatBox = ({chat, user, sendMessage, updateActiveChat}) => {
         const [messages, setMessages] = useState([]);
         const [chatBottom, setChatBottom] = useState(null);
         const [activeChat, setActiveChat] = useState({_id: "", name: "", messages: []})
-        socket.on("updateChat", (data) => {
-            console.log("new message has been sent to the active chat")
-            console.log(data)
-        })
+
         const onSubmit = e => {
             e.preventDefault();
             const message = e.target.message.value
@@ -128,7 +125,11 @@ const ChatBox = ({chat, user, sendMessage}) => {
             if (chatBottom) {
                 chatBottom.scrollIntoView({behavior: "smooth"})
             }
-        }, [chat, activeChat._id, messages])
+            socket.on("updateChat", (data) => {
+                if(chat._id)
+                    updateActiveChat(chat._id)
+            })
+        }, [chat, activeChat._id, messages, activeChat, chatBottom, updateActiveChat])
         return (
             <Wrapper>
                 {messages ? (
@@ -199,7 +200,8 @@ const mapStateToProps = ({activeChat, user}) => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    sendMessage: (chatId, username, content) => dispatch(sendMessageAction(chatId, username, content))
+    sendMessage: (chatId, username, content) => dispatch(sendMessageAction(chatId, username, content)),
+    updateActiveChat: (chatId) => dispatch(updateActiveChatAction(chatId))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatBox);

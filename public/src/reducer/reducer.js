@@ -2,7 +2,12 @@ import {
     LOGIN_FAILED,
     LOGOUT_SUCCESS,
     LOGIN_SUCCESS,
-    LOGOUT_FAILED, AUTH_SUCCESS, SET_ACTIVE_CHAT_SUCCESS, SEND_MESSAGE_SUCCESS, CREATE_NEW_CHAT_SUCCESS
+    LOGOUT_FAILED,
+    AUTH_SUCCESS,
+    SET_ACTIVE_CHAT_SUCCESS,
+    SEND_MESSAGE_SUCCESS,
+    CREATE_NEW_CHAT_SUCCESS,
+    UPDATE_CHAT_SUCCESS
 } from "../actions/actions";
 
 const initialState = {
@@ -48,6 +53,14 @@ const rootReducer = (state = initialState, action) => {
                 activeChat: {
                     ...state.activeChat,
                     messages: [...state.activeChat.messages, action.payload.message]
+                }
+            }
+        case UPDATE_CHAT_SUCCESS:
+            return {
+                ...state,
+                activeChat: {
+                    ...state.activeChat,
+                    messages: [...action.payload.messages],
                 }
             }
         case CREATE_NEW_CHAT_SUCCESS:

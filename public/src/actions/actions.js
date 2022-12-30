@@ -8,6 +8,8 @@ export const AUTH_SUCCESS = "AUTH_SUCCESS"
 export const AUTH_FAILED = "AUTH_FAILED"
 export const SEND_MESSAGE_SUCCESS = "SEND_MESSAGE_SUCCESS"
 export const SEND_MESSAGE_FAILED = "SEND_MESSAGE_FAILED"
+export const UPDATE_CHAT_SUCCESS = "UPDATE_CHAT_SUCCESS"
+export const UPDATE_CHAT_FAILED = "UPDATE_CHAT_FAILED"
 export const SET_ACTIVE_CHAT_SUCCESS = "SET_ACTIVE_CHAT_SUCCESS"
 export const SET_ACTIVE_CHAT_FAILED = "SET_ACTIVE_CHAT_FAILED"
 export const CREATE_NEW_CHAT_SUCCESS = "CREATE_NEW_CHAT_SUCCESS"
@@ -82,9 +84,13 @@ export const authorize = () => async dispatch => {
         })
     }
 }
-export const setActiveChat = (chatId) => async dispatch => {
+export const setActiveChat = (oldChatId, newChatId) => async dispatch => {
     try {
-        const res = await axios.get(API_URL + "/chat/" + chatId,{withCredentials:true})
+        socket.emit("updateChat", { newChatId, oldChatId }, (response) => {
+            console.log(response.status); // ok
+        });
+        const res = await axios.get(API_URL + "/chat/" + newChatId,{withCredentials:true})
+
         dispatch({
             type: SET_ACTIVE_CHAT_SUCCESS,
             payload: {
@@ -140,6 +146,23 @@ export const createNewChat = (chatName, users) => async dispatch => {
     }catch(err){
         dispatch({
             type: CREATE_NEW_CHAT_FAILED,
+            error: err.message
+        })
+    }
+}
+
+export const updateActiveChat = (chatId) => async dispatch => {
+    try {
+        const res = await axios.get(API_URL + "/chat/" + chatId,{withCredentials:true})
+        dispatch({
+            type: UPDATE_CHAT_SUCCESS,
+            payload: {
+                messages: res.data.chat.messages,
+            }
+        })
+    }catch(err){
+        dispatch({
+            type: UPDATE_CHAT_FAILED,
             error: err.message
         })
     }

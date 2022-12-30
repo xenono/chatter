@@ -64,7 +64,7 @@ const Button = styled.button`
 const ChatNavigation = ({activeChat, setActiveChat, chats, setModalActive}) => {
     const [chatNav, setChatNav] = useState([])
     const handleChatClick = (id) => {
-        setActiveChat(id)
+        setActiveChat(activeChat._id, id)
     }
     useEffect(() => {
         setChatNav(chats)
@@ -110,7 +110,7 @@ const mapStateToProps = ({activeChat, chats}) => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    setActiveChat: (chatId) => dispatch(setActiveChatAction(chatId))
+    setActiveChat: (oldChatId, newChatId) => dispatch(setActiveChatAction(oldChatId, newChatId))
 })
 
 ChatNavigation.propTypes = {};
