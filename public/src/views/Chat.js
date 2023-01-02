@@ -14,17 +14,23 @@ const ChatWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   background-color: ${({theme}) => theme.normal};
+  @media(max-width: 800px){
+    height: 85vh;
+    position: relative;
+  }
 `
 const Chat = ({state, cookies}) => {
     const [isModalActive, setModalActive] = useState(false);
+    const [isChatsSliderActive, setChatsSliderActive] = useState(false);
+    const [isFriendsSliderActive, setFriendsSliderActive] = useState(false);
     return (
         <MainTemplate>
             <Auth cookies={cookies}>
                 <ChatWrapper>
                     { isModalActive && <NewChatModal setModalActive={setModalActive} />}
-                    <ChatNavigation setModalActive={setModalActive}/>
-                    <ChatBox/>
-                    <FriendsList/>
+                    <ChatNavigation setModalActive={setModalActive} isMobile={isChatsSliderActive} />
+                    <ChatBox setChatsSliderActive={setChatsSliderActive} setFriendsSliderActive={setFriendsSliderActive} isChatsSliderActive={isChatsSliderActive} isFriendsSliderActive={isFriendsSliderActive}/>
+                    <FriendsList isMobile={isFriendsSliderActive} />
                 </ChatWrapper>
             </Auth>
         </MainTemplate>

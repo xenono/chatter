@@ -9,12 +9,16 @@ const Wrapper = styled.div`
   position: absolute;
   height: 100%;
   width: 5%;
-  right: 1%;
+  right: 3%;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media (max-width: 800px){
+    right: 8%;
+  }
 `
 const Image = styled.img`
   height: 85%;

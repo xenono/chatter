@@ -44,7 +44,7 @@ exports.sendMessage = async (req, res, next) => {
         }
         chat.messages.push(message)
         await chat.save();
-        io.getIO().to(chat._id.toString()).emit("updateChat",{dummy:1})
+        io.getIO().to(chat._id.toString()).emit("updateChat",{chatId:chat._id.toString()})
 
         res.status(200).json({status: 200})
 

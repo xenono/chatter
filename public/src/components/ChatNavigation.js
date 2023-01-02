@@ -11,11 +11,20 @@ const Wrapper = styled.div`
   border-right: 1px solid ${({theme}) => theme.light};
   color: ${({theme}) => theme.light};
   background-color: ${({theme}) => theme.dark};
+  @media (max-width: 800px) {
+    width: 50%;
+    max-height: 50%;
+    display: ${props => props.isMobile ? "initial" : "none"} !important;
+    position: absolute;
+    left: 0;
+    top: 6%;
+    z-index: 999;
+  }
 `
 
 const ChatRoomsWrapper = styled.div`
-  height: 95%;
   overflow-y: auto;
+
   ::-webkit-scrollbar {
     width: 10px;
   }
@@ -37,6 +46,10 @@ const ChatRoomsWrapper = styled.div`
   ::-webkit-scrollbar-thumb:hover {
     background: #555;
   }
+
+  @media (max-width: 800px) {
+    //height: 50%;
+  }
 `
 const ChatRoomTile = styled.div`
   background-color: ${({isActive, theme}) => isActive ? theme.normal : theme.dark};
@@ -50,18 +63,21 @@ const ChatRoomTile = styled.div`
 
 const AddNewChatWrapper = styled.div`
   height: 5%;
+  margin: 20px 0 0 0;
 `
 
 const Button = styled.button`
+  height: 100%;
   border-radius: 0;
-  color:white;
+  color: white;
+
   :hover {
     background-color: white;
     color: black;
   }
 `
 
-const ChatNavigation = ({activeChat, setActiveChat, chats, setModalActive}) => {
+const ChatNavigation = ({activeChat, setActiveChat, chats, setModalActive, isMobile}) => {
     const [chatNav, setChatNav] = useState([])
     const handleChatClick = (id) => {
         setActiveChat(activeChat._id, id)
@@ -70,33 +86,34 @@ const ChatNavigation = ({activeChat, setActiveChat, chats, setModalActive}) => {
         setChatNav(chats)
     }, [chats])
     return (
-        <Wrapper className="d-flex justify-content-between flex-column">
+        <Wrapper className="d-flex justify-content-start flex-column" isMobile={isMobile}>
 
             <h3 className="text-center p-1 pt-2 mb-2">Chat rooms</h3>
             {chatNav.length ? (
                 <>
-            <ChatRoomsWrapper className="d-flex flex-column">
-                {chatNav.length && chatNav.map(chat => (
-                    <ChatRoomTile className="d-flex align-items-center p-2"
-                                  onClick={() => handleChatClick(chat._id,chat.name)} key={chat._id}
-                                  isActive={chat._id === activeChat._id}>
-                        <RoundImage src={PublicChatIcon} alt=""/>
-                        <div className="text-center d-flex align-content-around flex-column">
-                            <p className="m-0">{chat.name}</p>
-                        </div>
+                    <ChatRoomsWrapper className="d-flex flex-column">
+                        {chatNav.length && chatNav.map(chat => (
+                            <ChatRoomTile className="d-flex align-items-center p-2"
+                                          onClick={() => handleChatClick(chat._id, chat.name)} key={chat._id}
+                                          isActive={chat._id === activeChat._id}>
+                                <RoundImage src={PublicChatIcon} alt=""/>
+                                <div className="text-center d-flex align-content-around flex-column">
+                                    <p className="m-0">{chat.name}</p>
+                                </div>
 
-                    </ChatRoomTile>
-                ))}
+                            </ChatRoomTile>
+                        ))}
 
-            </ChatRoomsWrapper>
+                    </ChatRoomsWrapper>
                 </>
-            ):(
+            ) : (
                 <div className="w-100 h-100 d-flex justify-content-center align-items-center">
                     <h1 className="text-white">Loading...</h1>
                 </div>
             )}
-            <AddNewChatWrapper className="mb-1">
-                <Button className="btn btn-lg w-100 fs-5 border" onClick={() => setModalActive(true)}>Create new chat</Button>
+            <AddNewChatWrapper>
+                <Button className="btn btn-lg w-100 fs-5 border d-flex justify-content-center align-items-center"
+                        onClick={() => setModalActive(true)}>New chat</Button>
             </AddNewChatWrapper>
         </Wrapper>
     );

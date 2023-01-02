@@ -9,6 +9,10 @@ import {Navigate, Redirect} from "react-router-dom";
 const Wrapper = styled.div`
   height: 7vh;
   box-shadow: 0 2px 6px #c4c4c4;
+  @media(max-width: 800px){
+    height: 12vh;
+    padding-bottom: 0 !important; 
+  }
 `
 
 const LogoImg = styled.img`

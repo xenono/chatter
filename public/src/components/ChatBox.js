@@ -2,8 +2,8 @@ import React, {useEffect, useState, useMemo} from 'react';
 import PropTypes from 'prop-types';
 import styled from "styled-components";
 import RoundImage from "./RoundImage";
-import Astronaut from "./../assets/astronaut.jpg";
-import Tiger from "../assets/tiger.jpg"
+import LeftArrow from '../assets/arrow_left.png'
+import RightArrow from '../assets/arrow_right.png'
 import {connect} from "react-redux";
 import {sendMessage as sendMessageAction, updateActiveChat as updateActiveChatAction} from "../actions/actions";
 import ChatMembersList from "./ChatMembersList";
@@ -12,6 +12,10 @@ import socket from "../socket/socket";
 const Wrapper = styled.div`
   width: 70%;
   background-color: ${({theme}) => theme.normal};
+  
+  @media (max-width: 800px) {
+    width: 100%;
+  }
 
 `
 const ChatName = styled.div`
@@ -75,6 +79,10 @@ const NewMessageForm = styled.form`
   transform: translateX(-50%);
   border-radius: 10px;
   padding: 5px 5px;
+
+  @media (max-width: 800px) {
+    width: 80%;
+  }
 `
 
 const Input = styled.input`
@@ -107,7 +115,27 @@ const DateText = styled.span`
   color: ${({theme}) => theme.sLight};
 `
 
-const ChatBox = ({chat, user, sendMessage, updateActiveChat}) => {
+const MobileArrowButton = styled.img`
+  display: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 50%;
+  @media (max-width: 800px) {
+    display: initial;
+  }
+  :hover{
+    cursor: pointer;
+  }
+`
+const ChatsArrow = styled(MobileArrowButton)`
+  left: 3%;
+`
+const FriendsArrow = styled(MobileArrowButton)`
+  right: 3%;
+`
+
+const ChatBox = ({chat, user, sendMessage, updateActiveChat, setChatsSliderActive, setFriendsSliderActive,isFriendsSliderActive,isChatsSliderActive}) => {
         const [messages, setMessages] = useState([]);
         const [chatBottom, setChatBottom] = useState(null);
         const [activeChat, setActiveChat] = useState({_id: "", name: "", messages: []})
@@ -126,8 +154,8 @@ const ChatBox = ({chat, user, sendMessage, updateActiveChat}) => {
                 chatBottom.scrollIntoView({behavior: "smooth"})
             }
             socket.on("updateChat", (data) => {
-                if(chat._id)
-                    updateActiveChat(chat._id)
+                if (chat._id)
+                    updateActiveChat(data.chatId)
             })
         }, [chat, activeChat._id, messages, activeChat, chatBottom, updateActiveChat])
         return (
@@ -137,6 +165,8 @@ const ChatBox = ({chat, user, sendMessage, updateActiveChat}) => {
                         <ChatName>
                             <h3 className="text-center p-1 pt-2 mb-2">{activeChat.name}</h3>
                             <ChatMembersList/>
+                            <FriendsArrow src={LeftArrow} onClick={() => setFriendsSliderActive(!isFriendsSliderActive)}/>
+                            <ChatsArrow src={RightArrow} onClick={() => setChatsSliderActive(!isChatsSliderActive)}/>
                         </ChatName>
                         <Chat>
                             {messages.length && messages.map(msg => (
