@@ -12,7 +12,7 @@ exports.login = async (req, res, next) => {
     try {
         const user = await User.findOne({username})
         if(!user){
-            const err = new Error("User does not exist!")
+            const err = new Error("Wrong Credentials!")
             err.statusCode = 401
             return next(err)
         }

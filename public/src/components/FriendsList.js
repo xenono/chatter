@@ -13,12 +13,12 @@ const Wrapper = styled.div`
   color: ${({theme}) => theme.light};;
   @media (max-width: 800px) {
     width: 50%;
-    max-height: 50%;
+    max-height: 350px;
     display: ${props => props.isMobile ? "initial" : "none"} !important;
     position: absolute;
     right: 0;
-    top: 6%;
-    z-index: 999;
+    top: 7%;
+    z-index: 990;
   }
 }
 `
@@ -29,17 +29,19 @@ const FriendTile = styled.div`
 const FriendsList = ({users, isMobile}) => {
     return (
         <Wrapper isMobile={isMobile}>
-            <h3 className="text-center p-1 pt-2 mb-2">All users</h3>
-            <div className="pl-3 pr-3">
+            <h3 className="text-center p-1 pt-2 mb-2">Users list</h3>
+            <div className="d-flex justify-content-start flex-column h-100 p-1" style={{maxHeight:"80vh"}}>
                 {users && users.length ? users.map(user => (
-                    <FriendTile className="d-flex align-items-center justify-content-start mt-3" key={user._id}>
+                    <FriendTile className="d-flex align-items-center justify-content-start mb-3" key={user._id}>
                         <RoundImage src={UserImage} alt="" className="mr-3"/>
                         <div className="text-center d-flex justify-content-center align-items-center">
                             <p className="m-0 text-warning">{user.username}</p>
                         </div>
                     </FriendTile>
                 )) : (
-                    <p>Loading...</p>
+                    <div className="w-100 h-100 d-flex justify-content-center align-items-center">
+                        <h3 className="text-white">Loading...</h3>
+                    </div>
 
                 )}
             </div>

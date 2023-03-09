@@ -64,7 +64,10 @@ const Chat = styled.div`
   }
 `
 const MessageContent = styled.div``;
-const MessageStream = styled.div``;
+const MessageStream = styled.div`
+  box-shadow: 2px 2px 8px #282828;
+  border-radius: 10px;
+`;
 const UserInfo = styled.div`
   min-height: 50px;
 `;
@@ -130,20 +133,31 @@ const MobileArrowButton = styled.img`
 `
 const ChatsArrow = styled(MobileArrowButton)`
   left: 3%;
+  transform: ${({isActive}) => isActive && 'translateY(-50%) rotate(90deg)'};
+  transition: transform 0.2s ease;
 `
 const FriendsArrow = styled(MobileArrowButton)`
   right: 3%;
+  transform: ${({isActive}) => isActive && 'translateY(-50%) rotate(-90deg)'};
+  transition: transform 0.2s ease;
 `
 
 const ChatBox = ({chat, user, sendMessage, updateActiveChat, setChatsSliderActive, setFriendsSliderActive,isFriendsSliderActive,isChatsSliderActive}) => {
         const [messages, setMessages] = useState([]);
         const [chatBottom, setChatBottom] = useState(null);
         const [activeChat, setActiveChat] = useState({_id: "", name: "", messages: []})
+        const [chatInput, setChatInput] = useState("")
+
+
+        const handleChatInputChange = e => {
+            setChatInput(e.target.value)
+        }
 
         const onSubmit = e => {
             e.preventDefault();
             const message = e.target.message.value
             sendMessage(chat._id, user.username, message)
+            setChatInput("")
         }
         useEffect(() => {
             if (activeChat && chat) {
@@ -165,14 +179,14 @@ const ChatBox = ({chat, user, sendMessage, updateActiveChat, setChatsSliderActiv
                         <ChatName>
                             <h3 className="text-center p-1 pt-2 mb-2">{activeChat.name}</h3>
                             <ChatMembersList/>
-                            <FriendsArrow src={LeftArrow} onClick={() => setFriendsSliderActive(!isFriendsSliderActive)}/>
-                            <ChatsArrow src={RightArrow} onClick={() => setChatsSliderActive(!isChatsSliderActive)}/>
+                            <FriendsArrow src={LeftArrow} onClick={() => setFriendsSliderActive(!isFriendsSliderActive)} isActive={isFriendsSliderActive}/>
+                            <ChatsArrow src={RightArrow} onClick={() => setChatsSliderActive(!isChatsSliderActive)} isActive={isChatsSliderActive}/>
                         </ChatName>
                         <Chat>
                             {messages.length && messages.map(msg => (
 
 
-                                <MessageStream className="mt-3" key={msg._id}>
+                                <MessageStream className="mt-3 p-3" key={msg._id}>
                                     <div className="w-100">
                                         <UserInfo className="d-flex mb-2">
                                             {/*<RoundImageAbsolute src={Tiger}/>*/}
@@ -202,7 +216,7 @@ const ChatBox = ({chat, user, sendMessage, updateActiveChat, setChatsSliderActiv
                         </Chat>
                         <NewMessageForm onSubmit={onSubmit} className="d-flex align-items-center justify-content-around"
                                         autocomplete="off">
-                            <Input type="text" name="message" id="message" placeholder="New message"/>
+                            <Input type="text" name="message" id="message" placeholder="New message" value={chatInput} onChange={handleChatInputChange}/>
                             <Button className="btn btn-large" type="submit" onKeyPress={(e) => {
                                 if (e.key === "enter") {
                                     onSubmit(e)

@@ -1,4 +1,4 @@
-import React, { useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components'
 import {connect} from "react-redux";
 import logo from '../assets/chat.png'
@@ -17,24 +17,30 @@ const Form = styled.form`
   box-shadow: 4px 4px 6px #c4c4c4;
 `
 const Login = ({login, isLoggedIn}) => {
+    const [error, setError] = useState(null)
 
-
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
         e.preventDefault();
         const username = e.target.username.value;
         const password = e.target.password.value;
-        login(username, password)
-
-
+        const err = await login(username, password)
+        if(err) setError(err)
+        else setError(null)
     }
     if(isLoggedIn === true){
         return <Navigate to="/chat" />
     }
     return (
         <Wrapper className="d-flex justify-content-center align-items-center">
+
             <Form className="form-signin text-center" onSubmit={onSubmit}>
                 <img className="mb-1" src={logo} alt="" width="72" height="72"/>
                 <h1 className="h1 mb-3 font-weight-normal">Chatter</h1>
+                {error && (
+                    <div className="alert alert-danger" role="alert">
+                        <p className="m-0">{error.message}</p>
+                    </div>
+                )}
                 <label htmlFor="username" className="sr-only mb-2">Username</label>
                 <input type="text" id="username" name="username" className="form-control mb-3" placeholder="Username"
                        required

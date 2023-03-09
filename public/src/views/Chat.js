@@ -15,7 +15,7 @@ const ChatWrapper = styled.div`
   justify-content: space-between;
   background-color: ${({theme}) => theme.normal};
   @media(max-width: 800px){
-    height: 85vh;
+    height: 82vh;
     position: relative;
   }
 `

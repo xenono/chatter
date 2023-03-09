@@ -11,14 +11,16 @@ const Wrapper = styled.div`
   border-right: 1px solid ${({theme}) => theme.light};
   color: ${({theme}) => theme.light};
   background-color: ${({theme}) => theme.dark};
+  overflow-y: auto;
+
   @media (max-width: 800px) {
     width: 50%;
-    max-height: 50%;
+    max-height: 350px;
     display: ${props => props.isMobile ? "initial" : "none"} !important;
     position: absolute;
     left: 0;
-    top: 6%;
-    z-index: 999;
+    top: 7%;
+    z-index: 990;
   }
 `
 
@@ -108,7 +110,7 @@ const ChatNavigation = ({activeChat, setActiveChat, chats, setModalActive, isMob
                 </>
             ) : (
                 <div className="w-100 h-100 d-flex justify-content-center align-items-center">
-                    <h1 className="text-white">Loading...</h1>
+                    <h3 className="text-white">Loading...</h3>
                 </div>
             )}
             <AddNewChatWrapper>

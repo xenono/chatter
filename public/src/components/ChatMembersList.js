@@ -16,28 +16,35 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
 
-  @media (max-width: 800px){
+  @media (max-width: 800px) {
     right: 8%;
+  }
+
+  @media (max-width: 625px){
+    right: 15%;
   }
 `
 const Image = styled.img`
-  height: 85%;
-
+  transform: ${({isActive}) => isActive && 'translateY(0) rotate(-90deg)'};
+  transition: transform 0.2s ease;
+  
   :hover {
     cursor: pointer;
   }
+  
+ 
 `
 
 const MembersListModal = styled.div`
   position: absolute;
   //height: 200px;
-  width: 200px;
+  width: 250px;
   top: 100%;
-  right: 0;
+  right: -60%;
   opacity: 1;
   background-color: ${(({theme}) => theme.dark)};
 `
-const ChatMembersList = ({members}) => {
+const ChatMembersList = ({members, admin}) => {
     const [isListActive, setListActive] = useState(false)
     const [chatMembers, setChatMembers] = useState([])
     const handleMenuClick = () => {
@@ -48,17 +55,19 @@ const ChatMembersList = ({members}) => {
             setChatMembers(members)
         }
     }, [members])
+
     return (
         <Wrapper>
-            <Image src={Menu} onClick={handleMenuClick}/>
+            <Image src={Menu} onClick={handleMenuClick} isActive={isListActive}/>
             {isListActive && (
                 <MembersListModal className="border border-warning p-2">
                     <ol className="d-flex justify-content-around align-content-start flex-column h-100">
-                        {chatMembers && chatMembers.map(member => (
-                            <li>
-                                {member.username}
-                            </li>
-                        ))}
+                        {chatMembers && [...chatMembers].reverse().map(member => {
+                            return (
+                                <li key={member._id} className="p-1">
+                                    {member._id === admin._id ? member.username + " (Admin)" : member.username}
+                                </li>
+                            )})}
                     </ol>
                 </MembersListModal>
             )}
@@ -70,7 +79,8 @@ ChatMembersList.propTypes = {};
 
 const mapStateToProps = ({activeChat}) => {
     return {
-        members: activeChat.members
+        members: activeChat.members,
+        admin: activeChat.admin
     }
 }
 export default connect(mapStateToProps)(ChatMembersList);

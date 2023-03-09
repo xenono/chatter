@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios'
 
 import PropTypes from 'prop-types';
@@ -19,6 +19,8 @@ const Form = styled.form`
 
 const Signup = props => {
     const [isFormSubmit, setFormSubmit] = useState(false)
+    const [error, setError] = useState(null)
+
     const onSubmit = async (e) => {
         e.preventDefault();
         const username = e.target.username.value;
@@ -28,11 +30,12 @@ const Signup = props => {
             await axios.post(API_URL + "/signup",{username,password,confirmPassword})
             setFormSubmit(true)
         }catch(err){
-            console.log(err.response.data)
             setFormSubmit(false)
+            setError(err.response.data)
         }
 
     }
+
     if(isFormSubmit === true){
         return <Navigate to="/chat" />
     }
@@ -41,6 +44,11 @@ const Signup = props => {
             <Form className="form-signin text-center" onSubmit={onSubmit}>
                 <img className="mb-1" src={logo} alt="" width="72" height="72"/>
                 <h1 className="h1 mb-3 font-weight-normal">Chatter</h1>
+                {error && (
+                    <div className="alert alert-danger" role="alert">
+                        <p className="m-0">{error.message}</p>
+                    </div>
+                )}
                 <label htmlFor="username" className="sr-only mb-2">Username</label>
                 <input type="text" id="username" name="username" className="form-control mb-3" placeholder="Username"
                        required

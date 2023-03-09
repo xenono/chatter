@@ -27,7 +27,7 @@ exports.createUser = async (req,res,next) => {
         res.status(200).json({status:200,message: "User has been created."})
     }catch(err){
         console.log(err.message)
-        err.message = "Can't create a new user!"
+        err.message = "There was an error while creating a new user!"
         err.statusCode = 400;
         next(err)
     }
@@ -35,7 +35,6 @@ exports.createUser = async (req,res,next) => {
 
 exports.getAllUsers = async (req,res,next) => {
     try {
-        console.log(req.userId)
         const users = await User.find({_id: {$ne: req.userId}}).select("username")
         res.status(200).json({status:200,users})
     }catch(err){
