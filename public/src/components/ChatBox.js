@@ -142,7 +142,7 @@ const FriendsArrow = styled(MobileArrowButton)`
   transition: transform 0.2s ease;
 `
 
-const ChatBox = ({chat, user, sendMessage, updateActiveChat, setChatsSliderActive, setFriendsSliderActive,isFriendsSliderActive,isChatsSliderActive}) => {
+const ChatBox = ({chat, user, sendMessage, updateActiveChat, setChatsSliderActive, setFriendsSliderActive,isFriendsSliderActive,isChatsSliderActive, setEditChatModalActive, setAddUserToChatModalActive}) => {
         const [messages, setMessages] = useState([]);
         const [chatBottom, setChatBottom] = useState(null);
         const [activeChat, setActiveChat] = useState({_id: "", name: "", messages: []})
@@ -178,12 +178,12 @@ const ChatBox = ({chat, user, sendMessage, updateActiveChat, setChatsSliderActiv
                     <>
                         <ChatName>
                             <h3 className="text-center p-1 pt-2 mb-2">{activeChat.name}</h3>
-                            <ChatMembersList/>
+                            <ChatMembersList setEditChatModalActive={setEditChatModalActive} setAddUserToChatModalActive={setAddUserToChatModalActive}/>
                             <FriendsArrow src={LeftArrow} onClick={() => setFriendsSliderActive(!isFriendsSliderActive)} isActive={isFriendsSliderActive}/>
                             <ChatsArrow src={RightArrow} onClick={() => setChatsSliderActive(!isChatsSliderActive)} isActive={isChatsSliderActive}/>
                         </ChatName>
                         <Chat>
-                            {messages.length && messages.map(msg => (
+                            {messages.length ? messages.map(msg => (
 
 
                                 <MessageStream className="mt-3 p-3" key={msg._id}>
@@ -212,7 +212,11 @@ const ChatBox = ({chat, user, sendMessage, updateActiveChat, setChatsSliderActiv
                                          }}>
                                     </div>
                                 </MessageStream>
-                            ))}
+                            )) : (
+                                <div className="alert alert-warning mt-3 text-center">
+                                    Chat does not have any messages yet!
+                                </div>
+                            )}
                         </Chat>
                         <NewMessageForm onSubmit={onSubmit} className="d-flex align-items-center justify-content-around"
                                         autocomplete="off">

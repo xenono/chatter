@@ -25,6 +25,7 @@ const Navigation = ({user, logout, isLoggedIn}) => {
         logout();
     }
 
+
     return (
         <Wrapper
             className="d-flex flex-column flex-md-row align-items-center justify-content-between p-3 px-md-4 bg-white border-bottom box-shadow">

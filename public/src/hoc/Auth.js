@@ -8,9 +8,8 @@ const Auth = ({children, isLoggedIn, cookies, authorize}) => {
     const isLoggedInCookie = (cookies.get("isLoggedIn") === 'true')
     useEffect(() => {
         authorize()
-    },[authorize])
-
-    if(isLoggedInCookie === false ){
+    }, [])
+    if(isLoggedInCookie === false){
         return <Navigate to="/"/>
     }
     return children

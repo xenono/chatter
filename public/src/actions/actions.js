@@ -15,6 +15,12 @@ export const SET_ACTIVE_CHAT_SUCCESS = "SET_ACTIVE_CHAT_SUCCESS"
 export const SET_ACTIVE_CHAT_FAILED = "SET_ACTIVE_CHAT_FAILED"
 export const CREATE_NEW_CHAT_SUCCESS = "CREATE_NEW_CHAT_SUCCESS"
 export const CREATE_NEW_CHAT_FAILED = "CREATE_NEW_CHAT_FAILED"
+export const REMOVE_USER_SUCCESS = "REMOVE_USER_SUCCESS"
+export const REMOVE_USER_FAILED = "REMOVE_USER_FAILED"
+export const EDIT_CHAT_NAME_SUCCESS = "EDIT_CHAT_NAME_SUCCESS"
+export const EDIT_CHAT_NAME_FAILED = "EDIT_CHAT_NAME_FAILED"
+export const ADD_USERS_TO_CHAT_SUCCESS = "ADD_USERS_TO_CHAT_SUCCESS"
+export const ADD_USERS_TO_CHAT_FAILED = "ADD_USERS_TO_CHAT_FAILED"
 export const API_URL = process.env.REACT_APP_API_URL
 
 export const login = (username, password) => async dispatch => {
@@ -164,6 +170,59 @@ export const updateActiveChat = (chatId) => async dispatch => {
     } catch (err) {
         dispatch({
             type: UPDATE_CHAT_FAILED,
+            error: err.message
+        })
+    }
+}
+
+export const removeUserFromChat = (chatId, userId) => async dispatch => {
+    try {
+        await axios.post(API_URL + "/chat/removeUser", {chatId, userId}, {withCredentials: true})
+        dispatch({
+            type: REMOVE_USER_SUCCESS,
+            payload: {
+                userId
+            }
+        })
+    } catch (err) {
+        dispatch({
+            type: REMOVE_USER_FAILED,
+            error: err.message
+        })
+    }
+}
+
+export const editChatName = (chatId, newChatName) => async dispatch => {
+    try {
+        await axios.post(API_URL + "/chat/editChatName", {chatId, newChatName}, {withCredentials: true})
+        dispatch({
+            type: EDIT_CHAT_NAME_SUCCESS,
+            payload: {
+                newChatName,
+                chatId
+            }
+        })
+    } catch (err) {
+        dispatch({
+            type: EDIT_CHAT_NAME_FAILED,
+            error: err.message
+        })
+    }
+}
+
+export const addUsersToChat = (chatId, users) => async dispatch => {
+    console.log(chatId,users)
+    try {
+        await axios.post(API_URL + "/chat/addUsersToChat", {chatId,users}, {withCredentials:true})
+        dispatch({
+            type: ADD_USERS_TO_CHAT_SUCCESS,
+            payload: {
+                users
+            }
+        })
+    }catch(err){
+        dispatch({
+            type:ADD_USERS_TO_CHAT_FAILED,
             error: err.message
         })
     }

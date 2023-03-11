@@ -7,6 +7,8 @@ import ChatBox from "../components/ChatBox";
 import NewChatModal from "../components/NewChatModal";
 import FriendsList from "../components/FriendsList";
 import Auth from "../hoc/Auth";
+import EditChatModal from "../components/EditChatModal";
+import AddUserToChatModal from "../components/AddUserToChatModal";
 
 const ChatWrapper = styled.div`
   height: 90vh;
@@ -15,21 +17,26 @@ const ChatWrapper = styled.div`
   justify-content: space-between;
   background-color: ${({theme}) => theme.normal};
   @media(max-width: 800px){
-    height: 82vh;
+    height3: 82vh;
     position: relative;
   }
 `
 const Chat = ({state, cookies}) => {
-    const [isModalActive, setModalActive] = useState(false);
+    const [isNewChatModalActive, setNewChatModalActive] = useState(false);
     const [isChatsSliderActive, setChatsSliderActive] = useState(false);
     const [isFriendsSliderActive, setFriendsSliderActive] = useState(false);
+    const [isEditChatModalActive, setEditChatModalActive] = useState(false)
+    const [isAddUserToChatModalActive, setAddUserToChatModalActive] = useState(false)
+
     return (
         <MainTemplate>
             <Auth cookies={cookies}>
                 <ChatWrapper>
-                    { isModalActive && <NewChatModal setModalActive={setModalActive} />}
-                    <ChatNavigation setModalActive={setModalActive} isMobile={isChatsSliderActive} />
-                    <ChatBox setChatsSliderActive={setChatsSliderActive} setFriendsSliderActive={setFriendsSliderActive} isChatsSliderActive={isChatsSliderActive} isFriendsSliderActive={isFriendsSliderActive}/>
+                    { isNewChatModalActive && <NewChatModal setModalActive={setNewChatModalActive} />}
+                    { isEditChatModalActive && <EditChatModal setModalActive={setEditChatModalActive} />}
+                    { isAddUserToChatModalActive && <AddUserToChatModal setModalActive={setAddUserToChatModalActive} />}
+                    <ChatNavigation setModalActive={setNewChatModalActive} isMobile={isChatsSliderActive} />
+                    <ChatBox setChatsSliderActive={setChatsSliderActive} setFriendsSliderActive={setFriendsSliderActive} isChatsSliderActive={isChatsSliderActive} isFriendsSliderActive={isFriendsSliderActive} setEditChatModalActive={setEditChatModalActive} setAddUserToChatModalActive={setAddUserToChatModalActive}/>
                     <FriendsList isMobile={isFriendsSliderActive} />
                 </ChatWrapper>
             </Auth>

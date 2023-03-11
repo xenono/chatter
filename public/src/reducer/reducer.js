@@ -7,7 +7,7 @@ import {
     SET_ACTIVE_CHAT_SUCCESS,
     SEND_MESSAGE_SUCCESS,
     CREATE_NEW_CHAT_SUCCESS,
-    UPDATE_CHAT_SUCCESS
+    UPDATE_CHAT_SUCCESS, REMOVE_USER_SUCCESS, EDIT_CHAT_NAME_SUCCESS, AUTH_FAILED, ADD_USERS_TO_CHAT_SUCCESS
 } from "../actions/actions";
 
 const initialState = {
@@ -47,6 +47,10 @@ const rootReducer = (state = initialState, action) => {
                 users: action.payload.users
 
             }
+        case AUTH_FAILED:
+            return {
+                ...initialState
+            }
         case SEND_MESSAGE_SUCCESS:
             return {
                 ...state,
@@ -72,6 +76,33 @@ const rootReducer = (state = initialState, action) => {
             return {
                 ...state,
                 activeChat: action.payload.chat
+            }
+        case REMOVE_USER_SUCCESS:
+            return {
+                ...state,
+                activeChat: {
+                    ...state.activeChat,
+                    members: [...state.activeChat.members.filter(({_id}) => _id !== action.payload.userId)]
+                }
+            }
+        case EDIT_CHAT_NAME_SUCCESS:
+            const editedChat = state.chats.find(c => c._id === action.payload.chatId)
+            editedChat.name = action.payload.newChatName
+            return {
+                ...state,
+                activeChat: {
+                    ...state.activeChat,
+                    name: action.payload.newChatName
+                },
+                chats: [...state.chats.filter(c => c._id !== action.payload.chatId), editedChat]
+            }
+        case ADD_USERS_TO_CHAT_SUCCESS:
+            return {
+                ...state,
+                activeChat: {
+                    ...state.activeChat,
+                    members: [...action.payload.users,...state.activeChat.members]
+                }
             }
         default:
             return {
