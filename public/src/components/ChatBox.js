@@ -171,7 +171,7 @@ const ChatBox = ({chat, user, sendMessage, updateActiveChat, setChatsSliderActiv
                 if (chat._id)
                     updateActiveChat(data.chatId)
             })
-        }, [chat, activeChat._id, messages, activeChat, chatBottom, updateActiveChat])
+        }, [chat])
         return (
             <Wrapper>
                 {messages ? (
